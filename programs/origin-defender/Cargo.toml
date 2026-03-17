@@ -1,0 +1,27 @@
+[package]
+name = "origin_defender"
+version = "0.1.0"
+description = "Solve Pump.fun token vampirism with narrative fingerprinting, bonded liquidity, and backer verification"
+edition = "2021"
+
+[lib]
+crate-type = ["cdylib", "lib"]
+name = "origin_defender"
+
+[features]
+no-entrypoint = []
+no-idl = []
+no-log-ix = []
+cpi = ["no-entrypoint"]
+default = []
+
+[dependencies]
+anchor-lang = "0.30.0"
+anchor-spl = "0.30.0"
+solana-program = "1.18.0"
+
+[dev-dependencies]
+solana-program-test = "1.18.0"
+solana-validator = "1.18.0"
+solana-sdk = "1.18.0"
+anyhow = "1"

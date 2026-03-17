@@ -1,0 +1,13 @@
+[features]
+seeds = false
+skip-lint = true
+
+[programs.localnet]
+origin_defender = "FIXME_REPLACE_WITH_YOUR_PROGRAM_ID"
+
+[registry]
+url = "https://api.apr.dev"
+
+[provider]
+cluster = "localnet"
+wallet = "~/.config/solana/id.json"
