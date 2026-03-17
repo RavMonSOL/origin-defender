@@ -277,7 +277,7 @@ It joins these datasets in PostgreSQL and serves:
 
 The indexer also:
 - Fetches the bags.fm BondingCurve PDA for each token to get `real_sol_reserves` (actual liquidity) and `complete` status
-- When a token migrates (`complete == true`), it optionally tracks the PumpSwap pool for continued liquidity metrics
+- When a token migrates (`complete == true`), it optionally tracks the associated AMM pool for continued liquidity metrics
 - Periodically writes `NarrativeRecord` updates (e.g., backer density) via the `update_narrative_metrics` instruction, ensuring on‑chain verifiability
 
 Note: The bonding curve account does **not** store the creator field; creator is only used in PDA derivation. The indexer associates the token with its creator via the `register_narrative` instruction.

@@ -14,7 +14,7 @@ Environment variables:
     DATABASE_URL – PostgreSQL connection string
     SOLANA_RPC_URL – RPC endpoint (mainnet-beta)
     ORIGIN_DEFENDER_PROGRAM_ID – OriginDefender program ID
-    PUMPFUN_PROGRAM_ID – bags.fm program ID (default: 6EF8rrecthR5Dkzon8Nwu78hRvfCKubJ14M5uBEwF6P)
+    BAGS_PROGRAM_ID – bags.fm program ID (default: BAGSW19DgadF4px3znCzHg8bXVVF4Dr17omvRS3VCkn)
     COMMITMENT – 'confirmed' or 'finalized' (default: confirmed)
 """
 
@@ -37,9 +37,9 @@ logger = logging.getLogger(__name__)
 DATABASE_URL = os.getenv("DATABASE_URL")
 SOLANA_RPC_URL = os.getenv("SOLANA_RPC_URL", "https://api.mainnet-beta.solana.com")
 ORIGIN_DEFENDER_PROGRAM_ID = PublicKey(os.getenv("ORIGIN_DEFENDER_PROGRAM_ID"))
-PUMPFUN_PROGRAM_ID = PublicKey(
+BAGS_PROGRAM_ID = PublicKey(
     os.getenv(
-        "PUMPFUN_PROGRAM_ID",
+        "BAGS_PROGRAM_ID",
         "BAGSW19DgadF4px3znCzHg8bXVVF4Dr17omvRS3VCkn"
     )
 )
@@ -83,7 +83,7 @@ class Indexer:
     async def start(self):
         self.rpc = AsyncClient(SOLANA_RPC_URL)
         await self.subscribe_program_logs(ORIGIN_DEFENDER_PROGRAM_ID, self.handle_origin_defender_log)
-        await self.subscribe_program_logs(PUMPFUN_PROGRAM_ID, self.handle_bagsfm_log)
+        await self.subscribe_program_logs(BAGS_PROGRAM_ID, self.handle_bagsfm_log)
         # Keep running
         while True:
             await asyncio.sleep(3600)
@@ -157,7 +157,7 @@ class Indexer:
         try:
             tx = await self.rpc.get_transaction(signature, encoding="jsonParsed", max_supported_transaction_version=0)
             if tx and tx.value:
-                # Look for instruction where program_id = PUMPFUN_PROGRAM_ID (bags.fm) and data discriminator matches CreateBag.
+                # Look for instruction where program_id = BAGS_PROGRAM_ID (bags.fm) and data discriminator matches CreateBag.
                 # The jsonParsed format may show instruction type if the IDL is known; not guaranteed.
                 # For robust solution, use bags.fm IDL or a decoder; but for now we'll assume we can identify.
                 await self.maybe_fetch_bonding_curve(tx.value)
@@ -242,12 +242,12 @@ class Indexer:
             mint_pubkey = PublicKey(mint)
             bag_pda = PublicKey.find_program_address(
                 [b"bag", bytes(mint_pubkey)],
-                PUMPFUN_PROGRAM_ID
+                BAGS_PROGRAM_ID
             )[0]
             # Then derive Bonding Curve PDA: seeds = ["bonding-curve", bag]
             bonding_curve_pda = PublicKey.find_program_address(
                 [b"bonding-curve", bytes(bag_pda)],
-                PUMPFUN_PROGRAM_ID
+                BAGS_PROGRAM_ID
             )[0]
             account_info = await self.rpc.get_account_info(bonding_curve_pda)
             if not account_info.value:
