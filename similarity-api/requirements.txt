@@ -1,0 +1,13 @@
+fastapi==0.110.0
+uvicorn[standard]==0.29.0
+sentence-transformers==2.5.0
+torch==2.2.2
+faiss-cpu==1.8.0
+numpy==1.24.4
+psycopg2-binary==2.9.9
+redis==5.0.4
+sqlalchemy==2.0.28
+pgvector==0.2.5
+pydantic==2.6.3
+python-dotenv==1.0.1
+requests==2.31.0

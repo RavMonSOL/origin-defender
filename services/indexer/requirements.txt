@@ -1,0 +1,11 @@
+psycopg2-binary==2.9.9
+solana==0.30.2
+solders==0.21.0
+gql==3.4.1
+websockets==12.0
+python-dotenv==1.0.1
+redis==5.0.4
+pumpfun-rs @ git+https://github.com/nhuxhr/pumpfun-rs.git#egg=pumpfun-rs&subdirectory=.
+# Above requires Rust toolchain to build if not prebuilt; alternatively use a precompiled wheel
+# For simplicity, we might use the SDK via HTTP RPC instead of the Rust crate
+# We'll use solana-py and manual RPC calls to avoid Rust compilation in Docker
